@@ -1,3 +1,5 @@
+import { isBrowser } from './env'
+
 export type Microtask = () => void
 
 const createQueueMicrotaskViaPromises = () => {
@@ -30,10 +32,11 @@ const createQueueMicrotaskViaMutationObserver = () => {
  * Note: since Promise polyfills are popular but not all support microtasks,
  * we check for native implementation rather than a polyfill.
  */
-export const queueMicrotask =
-  'queueMicrotask' in window
+export const createQueueMicrotask = () => {
+  return isBrowser && 'queueMicrotask' in window
     ? window.queueMicrotask
     : typeof Promise === 'function' &&
       Promise.toString().includes('[native code]')
     ? createQueueMicrotaskViaPromises()
     : createQueueMicrotaskViaMutationObserver()
+}

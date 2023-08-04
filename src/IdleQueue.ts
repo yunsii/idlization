@@ -1,10 +1,12 @@
 import { now } from './helpers/now'
 import { cIC, rIC } from './idle-callback-polyfill'
-import { queueMicrotask } from './helpers/queueMicrotask'
+import { isBrowser } from './helpers/env'
+import { createQueueMicrotask } from './helpers/queueMicrotask'
 
 const DEFAULT_MIN_TASK_TIME = 0
 
 const isSafari_ = !!(
+  isBrowser &&
   'safari' in window &&
   typeof window.safari === 'object' &&
   'pushNotification' in (window.safari as any)
@@ -41,6 +43,7 @@ export class IdleQueue {
   private state_: State | null
   private defaultMinTaskTime_: number
   private ensureTasksRun_: boolean
+  private queueMicrotask?: (callback: VoidFunction) => void
 
   /**
    * Creates the IdleQueue instance and adds lifecycle event listeners to
@@ -161,7 +164,10 @@ export class IdleQueue {
    */
   private scheduleTasksToRun_() {
     if (this.ensureTasksRun_ && document.visibilityState === 'hidden') {
-      queueMicrotask(this.runTasks_)
+      if (!this.queueMicrotask) {
+        this.queueMicrotask = createQueueMicrotask()
+      }
+      this.queueMicrotask(this.runTasks_)
     } else {
       if (!this.idleCallbackHandle_) {
         this.idleCallbackHandle_ = rIC(this.runTasks_)
