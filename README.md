@@ -17,6 +17,7 @@
 
 - [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/)
 - [GoogleChromeLabs/idlize](https://github.com/GoogleChromeLabs/idlize)
+- [Measure performance with the RAIL model](https://web.dev/rail/#response:-process-events-in-under-50ms)
 
 ## License
 
