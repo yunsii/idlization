@@ -34,13 +34,13 @@ type Task = (state: State) => void
  *      run in unload-type situations.
  */
 export class IdleQueue {
-  idleCallbackHandle_: number | null
-  taskQueue_: { state: State; task: Task; minTaskTime: number }[]
-  isProcessing_ = false
+  private idleCallbackHandle_: number | null
+  private taskQueue_: { state: State; task: Task; minTaskTime: number }[]
+  private isProcessing_ = false
 
-  state_: State | null
-  defaultMinTaskTime_: number
-  ensureTasksRun_: boolean
+  private state_: State | null
+  private defaultMinTaskTime_: number
+  private ensureTasksRun_: boolean
 
   /**
    * Creates the IdleQueue instance and adds lifecycle event listeners to
@@ -138,7 +138,7 @@ export class IdleQueue {
     }
   }
 
-  addTask_(
+  private addTask_(
     arrayMethod: Array<any>['push'] | Array<any>['unshift'],
     task: Task,
     { minTaskTime = this.defaultMinTaskTime_ } = {},
@@ -159,7 +159,7 @@ export class IdleQueue {
    * in cases where a macrotask couldn't (like if the page is unloading). If
    * the document is in the visible state, `requestIdleCallback` is used.
    */
-  scheduleTasksToRun_() {
+  private scheduleTasksToRun_() {
     if (this.ensureTasksRun_ && document.visibilityState === 'hidden') {
       queueMicrotask(this.runTasks_)
     } else {
@@ -176,7 +176,7 @@ export class IdleQueue {
    * then the tasks are run until there's no time remaining, at which point
    * we yield to input or other script and wait until the next idle time.
    */
-  runTasks_(deadline?: IdleDeadline) {
+  private runTasks_(deadline?: IdleDeadline) {
     this.cancelScheduledRun_()
 
     if (!this.isProcessing_) {
@@ -209,7 +209,7 @@ export class IdleQueue {
   /**
    * Cancels any scheduled idle callback and removes the handler (if set).
    */
-  cancelScheduledRun_() {
+  private cancelScheduledRun_() {
     if (this.idleCallbackHandle_) {
       cIC(this.idleCallbackHandle_)
     }
@@ -220,7 +220,7 @@ export class IdleQueue {
    * A callback for the `visibilitychange` event that runs all pending
    * callbacks immediately if the document's visibility state is hidden.
    */
-  onVisibilityChange_() {
+  private onVisibilityChange_() {
     if (document.visibilityState === 'hidden') {
       this.runTasksImmediately()
     }

@@ -4,9 +4,9 @@ import { cIC, rIC } from './idle-callback-polyfill'
  * A class that wraps a value that is initialized when idle.
  */
 export class IdleValue<F extends () => any> {
-  init_: F
-  value_?: ReturnType<F>
-  idleHandle_: number | null
+  private init_: F
+  private value_?: ReturnType<F>
+  private idleHandle_: number | null
   initialized = false
 
   /**
@@ -45,7 +45,7 @@ export class IdleValue<F extends () => any> {
   /**
    * Cancels any scheduled requestIdleCallback and resets the handle.
    */
-  cancelIdleInit_() {
+  private cancelIdleInit_() {
     if (this.idleHandle_) {
       cIC(this.idleHandle_)
       this.idleHandle_ = null
