@@ -1,3 +1,3 @@
 export const now = () => {
-  return +new Date()
+  return Date.now()
 }
