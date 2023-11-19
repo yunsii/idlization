@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+import './global.css'
+
 import React from 'react'
 import { createTheme, defaultSideNavs } from 'vite-pages-theme-doc'
 
@@ -5,7 +8,7 @@ import Component404 from './404'
 
 import type { Theme } from 'vite-plugin-react-pages'
 
-const theme: Theme = (props) => {
+const SiteTheme: Theme = (props) => {
   const { loadedData, loadState } = props
 
   const DocTheme = createTheme({
@@ -42,4 +45,4 @@ const theme: Theme = (props) => {
   return <DocTheme loadedData={loadedData} loadState={loadState} />
 }
 
-export default theme
+export default SiteTheme
