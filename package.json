@@ -1,7 +1,7 @@
 {
   "name": "idlization",
   "description": "Helper classes and methods for implementing the idle-until-urgent pattern, based on TypeScript, and SSR compatible.",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "author": "Yuns <yuns.xie@qq.com>",
   "license": "MIT",
   "type": "module",

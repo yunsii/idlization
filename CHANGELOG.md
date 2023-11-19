@@ -1,5 +1,11 @@
 # idlization
 
+## 0.1.0
+
+### Minor Changes
+
+- ✨ feat: support IdlePromise
+
 ## 0.0.3
 
 ### Patch Changes
