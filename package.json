@@ -18,7 +18,8 @@
     "idle-until-urgent",
     "requestIdleCallback",
     "cancelIdleCallback",
-    "idlize"
+    "idlize",
+    "generator"
   ],
   "funding": [
     "https://opencollective.com/yuns",
