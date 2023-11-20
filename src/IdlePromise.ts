@@ -46,7 +46,7 @@ export class IdlePromise<T = unknown> {
   }
 
   // executing one chunk
-  async step() {
+  step = async () => {
     const { value, done } = await this.iterator.next()
     this.done = done
     if (!done) {
@@ -55,7 +55,7 @@ export class IdlePromise<T = unknown> {
   }
 
   // loop asynchronously, with `requestIdleCallback`
-  run() {
+  run = () => {
     this.idleCallbackId = rIC(async (idleDeadline) => {
       while (!this.done && this.duration < idleDeadline.timeRemaining()) {
         await this.step()
@@ -67,7 +67,7 @@ export class IdlePromise<T = unknown> {
   }
 
   // cancel current `requestIdleCallback` and run immediately
-  async finish() {
+  finish = async () => {
     if (this.idleCallbackId) {
       cIC(this.idleCallbackId)
     }
@@ -77,3 +77,7 @@ export class IdlePromise<T = unknown> {
     return this.promise
   }
 }
+
+const a = new IdlePromise(function* () {
+  yield
+})
