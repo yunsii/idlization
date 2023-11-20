@@ -9,6 +9,7 @@ function IdlePromisePage() {
   const [mounted, setMounted] = useState(false)
   const [runCount, setRunCount] = useState(1)
   const targetRef = useRef<HTMLDivElement>(null)
+  const finishRef = useRef<() => Promise<any>>()
 
   function isDisabledIdle() {
     const params = new URLSearchParams(location.search)
@@ -40,7 +41,7 @@ function IdlePromisePage() {
     } else {
       let idleStart = Date.now()
       console.log('blocking start')
-      new IdlePromise<number>(function* (resolve) {
+      const idlePromise = new IdlePromise<number>(function* (resolve) {
         let count = 0
         let chunkStart = Date.now()
         while (count <= WHILE_LIMIT) {
@@ -56,6 +57,9 @@ function IdlePromisePage() {
         }
         resolve(count)
       })
+      finishRef.current = idlePromise.finish
+
+      idlePromise
         .then((result) => {
           console.log('result', result)
         })
@@ -108,6 +112,7 @@ function IdlePromisePage() {
       <textarea className='p-1 border' />
       <div>
         <button
+          className='border'
           onClick={() => {
             if (isDisabledIdle()) {
               window.open(`${location.origin}${location.pathname}`, '_blank')
@@ -121,6 +126,26 @@ function IdlePromisePage() {
         >
           open {isDisabledIdle() ? 'idle working' : 'idle disabled'} page
         </button>
+        {!isDisabledIdle() && (
+          <button
+            className='border'
+            onClick={async () => {
+              if (finishRef.current) {
+                console.log(
+                  '🚀 ~ file: idle-promise$.tsx:132 ~ onClick={ ~ finishRef.current:',
+                  finishRef.current,
+                )
+                const result = await finishRef.current()
+                console.log(
+                  '🚀 ~ file: idle-promise$.tsx:131 ~ onClick={ ~ result:',
+                  result,
+                )
+              }
+            }}
+          >
+            finish idle promise
+          </button>
+        )}
       </div>
       <div className='w-full'>
         <div ref={targetRef} className='w-6 h-6 bg-cyan-500 rounded-full' />
