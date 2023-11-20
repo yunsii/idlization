@@ -1,5 +1,11 @@
 # idlization
 
+## 0.1.2
+
+### Patch Changes
+
+- 🐛 fix: fix 'this' by array function
+
 ## 0.1.1
 
 ### Patch Changes
