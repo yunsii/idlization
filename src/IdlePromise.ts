@@ -1,5 +1,9 @@
 import { cIC, rIC } from './idle-callback-polyfill'
 
+type Iterator<T = unknown, TReturn = any, TNext = unknown> =
+  | AsyncGenerator<T, TReturn, TNext>
+  | Generator<T, TReturn, TNext>
+
 /**
  * Browser only
  *
@@ -22,7 +26,7 @@ export class IdlePromise<T = unknown> {
   catch: typeof this.promise.catch
   finally: typeof this.promise.finally
 
-  iterator: Generator<number | void, void, void>
+  iterator: Iterator<number | void, void, void>
   done?: boolean
 
   // this constructor can be used exactly like `new Promise()`,
@@ -31,7 +35,7 @@ export class IdlePromise<T = unknown> {
     generator: (
       gResolve: (value: T | PromiseLike<T>) => void,
       gReject: (reason?: any) => void,
-    ) => Generator<void | number, void, void>,
+    ) => Iterator<void | number, void, void>,
   ) {
     this.then = this.promise.then.bind(this.promise)
     this.catch = this.promise.catch.bind(this.promise)
